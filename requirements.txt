@@ -4,7 +4,6 @@ torch
 nltk==3.8.1
 PyMuPDF
 python-docx
-collections
 spacy
 textblob
 logging
