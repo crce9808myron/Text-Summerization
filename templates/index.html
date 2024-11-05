@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Text Summarizer</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #343a40;
+            --secondary-color: #495057;
+            --accent-color: #6c757d;
+            --background-color: #f8f9fa;
+            --text-color: #343a40;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+    }
+
+    body {
+        background: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 3rem auto;
+        padding: 3rem;
+    }
+
+    .card {
+        background: white;
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 6px var(--shadow-color);
+        padding: 3rem;
+        margin-bottom: 3rem;
+        animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    h1 {
+        color: var(--primary-color);
+        text-align: center;
+        margin-bottom: 3rem;
+        font-size: 3rem;
+        font-weight: 700;
+    }
+
+    .options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .option-group {
+        background: var(--background-color);
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        border: 1px solid #dee2e6;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.75rem;
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+
+    select, textarea {
+        width: 100%;
+        padding: 1rem;
+        border: 2px solid #dee2e6;
+        border-radius: 0.75rem;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+    select:focus, textarea:focus {
+        border-color: var(--accent-color);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(108, 117, 125, 0.1);
+    }
+
+    textarea {
+        height: 250px;
+        resize: vertical;
+        margin-bottom: 1.5rem;
+        font-family: inherit;
+    }
+
+    .file-upload {
+        margin: 1.5rem 0;
+        padding: 3rem;
+        border: 2px dashed #dee2e6;
+        border-radius: 0.75rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .file-upload:hover {
+        border-color: var(--accent-color);
+        background: rgba(108, 117, 125, 0.05);
+    }
+
+    .file-upload input[type="file"] {
+        display: none;
+    }
+
+    .file-upload-label {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background: var(--accent-color);
+        color: white;
+        border-radius: 0.75rem;
+        cursor: pointer;
+        margin-top: 1.5rem;
+    }
+
+    .submit-btn {
+        display: block;
+        width: 100%;
+        padding: 1.25rem;
+        background: var(--secondary-color);
+        color: white;
+        border: none;
+        border-radius: 0.75rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 1.5rem;
+    }
+
+    .submit-btn:hover {
+        background: var(--primary-color);
+        transform: translateY(-3px);
+    }
+
+    .loading {
+        display: none;
+        text-align: center;
+        padding: 3rem;
+    }
+
+    .spinner {
+        width: 48px;
+        height: 48px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid var(--secondary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    .result-section {
+        display: none;
+        margin-top: 3rem;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        text-align: center;
+        box-shadow: 0 2px 4px var(--shadow-color);
+    }
+
+    .stat-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--secondary-color);
+    }
+
+    .stat-label {
+        font-size: 1rem;
+        color: var(--text-color);
+        margin-top: 0.75rem;
+    }
+
+    .keywords-section {
+        margin: 2rem 0;
+    }
+
+    .keyword-tag {
+        display: inline-block;
+        background: var(--accent-color);
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 1.5rem;
+        font-size: 1rem;
+        margin: 0.4rem;
+    }
+
+    .sentiment-section {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        margin: 1.5rem 0;
+        box-shadow: 0 2px 4px var(--shadow-color);
+    }
+
+    .summary-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 0.75rem;
+        margin-top: 1.5rem;
+        box-shadow: 0 2px 4px var(--shadow-color);
+    }
+
+    .error-message {
+        background: var(--error-color);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        margin: 1.5rem 0;
+        display: none;
+    }
+
+    footer {
+        text-align: center;
+        padding: 3rem;
+        margin-top: 3rem;
+        background: var(--primary-color);
+        color: white;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 1.5rem;
+        }
+
+        .card {
+            padding: 1.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="animate__animated animate__fadeInDown">Advanced Text Summarizer</h1>
+    <div class="card">
+        <form id="summaryForm">
+            <div class="options-grid">
+                <div class="option-group">
+                    <label for="length">Summary Length:</label>
+                    <select id="length" name="length">
+                        <option value="short">Short</option>
+                        <option value="medium">Medium</option>
+                        <option value="long">Long</option>
+                    </select>
+                </div>
+
+                <div class="option-group">
+                    <label for="style">Output Style:</label>
+                    <select id="style" name="style">
+                        <option value="paragraph">Paragraph</option>
+                        <option value="bullet">Bullet Points</option>
+                        <option value="outline">Outline</option>
+                    </select>
+                </div>
+
+                <div class="option-group">
+                    <label>
+                        <input type="checkbox" id="includeStats" name="include_stats" checked>
+                        Include Text Statistics
+                    </label>
+                </div>
+            </div>
+
+            <textarea id="text" name="text" placeholder="Paste your text here..."></textarea>
+
+            <div class="file-upload" id="dropZone">
+                <p>Drag and drop a file here or</p>
+                <input type="file" id="fileUpload" name="fileUpload" accept=".txt,.pdf,.docx">
+                <label for="fileUpload" class="file-upload-label">Choose File</label>
+                <p id="fileInfo" class="file-info"></p>
+            </div>
+
+            <button type="submit" class="submit-btn">Summarize Text</button>
+        </form>
+    </div>
+
+    <div class="loading">
+        <div class="spinner"></div>
+        <p>Generating summary...</p>
+    </div>
+
+    <div class="error-message" id="errorMessage"></div>
+
+    <div class="result-section" id="resultSection">
+        <div class="stats-grid" id="statsSection">
+            <!-- Stats will be populated here -->
+        </div>
+
+        <div class="keywords-section">
+            <h3>Key Concepts:</h3>
+            <div id="keywords">
+                <!-- Keywords will be populated here -->
+            </div>
+        </div>
+
+        <div class="sentiment-section">
+            <h3>Text Sentiment:</h3>
+            <div id="sentiment">
+                <!-- Sentiment will be populated here -->
+            </div>
+        </div>
+
+        <div class="summary-section">
+            <h3>Summary:</h3>
+            <div id="summary">
+                <!-- Summary will be populated here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    &copy; 2024 Text Summarizer Fr.CRCE AIDS
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('summaryForm');
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileUpload');
+        const fileInfo = document.getElementById('fileInfo');
+        const loading = document.querySelector('.loading');
+        const resultSection = document.getElementById('resultSection');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Drag and drop functionality
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = '#dee2e6';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#dee2e6';
+            fileInput.files = e.dataTransfer.files;
+            updateFileInfo();
+        });
+
+        fileInput.addEventListener('change', updateFileInfo);
+
+        function updateFileInfo() {
+            const file = fileInput.files[0];
+            if (file) {
+                fileInfo.textContent = `Selected file: ${file.name}`;
+            } else {
+                fileInfo.textContent = '';
+            }
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            errorMessage.style.display = 'none';
+            loading.style.display = 'block';
+            resultSection.style.display = 'none';
+
+            try {
+                const formData = new FormData(form);
+                const response = await fetch('/summarize', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayResults(data);
+                } else {
+                    throw new Error(data.error || 'Failed to generate summary');
+                }
+            } catch (error) {
+                errorMessage.textContent = error.message;
+                errorMessage.style.display = 'block';
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+
+        function displayResults(data) {
+            // Display statistics
+            if (data.statistics) {
+                const statsSection = document.getElementById('statsSection');
+                statsSection.innerHTML = Object.entries(data.statistics)
+                    .map(([key, value]) => `
+                        <div class="stat-card">
+                            <div class="stat-value">${value}</div>
+                            <div class="stat-label">${key.replace(/_/g, ' ').toUpperCase()}</div>
+                        </div>
+                    `).join('');
+            }
+
+            // Display keywords
+            if (data.keywords) {
+                const keywordsDiv = document.getElementById('keywords');
+                keywordsDiv.innerHTML = data.keywords
+                    .map(keyword => `<span class="keyword-tag">${keyword}</span>`)
+                    .join('');
+            }
+
+            // Display sentiment
+            if (data.sentiment) {
+                const sentimentDiv = document.getElementById('sentiment');
+                sentimentDiv.innerHTML = `
+                    <p>Sentiment: ${data.sentiment.label}</p>
+                    <p>Confidence: ${(data.sentiment.score * 100).toFixed(1)}%</p>
+                `;
+            }
+
+            // Display summary
+            document.getElementById('summary').innerHTML = data.summary;
+
+            // Show results
+            resultSection.style.display = 'block';
+        }
+    });
+</script>
+</body>
+</html>
