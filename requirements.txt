@@ -134,11 +134,6 @@ stringzilla==3.10.6
 sympy==1.13.1
 tbb==2021.12.0
 tenacity==9.0.0
-tensorboard==2.18.0
-tensorboard-data-server==0.7.2
-tensorflow==2.18.0
-tensorflow-io-gcs-filesystem==0.31.0
-tensorflow_intel==2.18.0
 termcolor==2.4.0
 terminaltables==3.1.10
 textblob==0.18.0.post0
