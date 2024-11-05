@@ -22,7 +22,6 @@ cymem==2.0.8
 debugpy==1.8.7
 decorator==5.1.1
 dnspython==2.7.0
-en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl#sha256=1932429db727d4bff3deed6b34cfc05df17794f4a52eeb26cf8928f7c1a0fb85
 et-xmlfile==1.1.0
 eval_type_backport==0.2.0
 exceptiongroup==1.2.2
@@ -110,7 +109,7 @@ pytesseract==0.3.10
 python-dateutil==2.9.0.post0
 python-docx==1.1.2
 pytz==2024.1
-pywin32==308
+# Removed incompatible pywin32 version as no valid version was found
 PyYAML==6.0.1
 pyzmq==26.2.0
 regex==2024.9.11
@@ -168,3 +167,4 @@ webencodings==0.5.1
 Werkzeug==3.0.2
 wrapt==1.16.0
 yfinance==0.2.48
+en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl#sha256=1932429db727d4bff3deed6b34cfc05df17794f4a52eeb26cf8928f7c1a0fb85
