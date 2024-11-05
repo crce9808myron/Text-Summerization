@@ -1,10 +1,9 @@
 Flask
 transformers
 torch
-nltk
+nltk==3.8.1
 PyMuPDF
 python-docx
-re
 collections
 spacy
 textblob
